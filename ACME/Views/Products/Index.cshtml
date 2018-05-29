@@ -1,0 +1,60 @@
+﻿@model IEnumerable<ACME.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @*@Html.ActionLink("Create New", "Create") <br />*@
+    @Html.ActionLink("Create", "Create", new RouteValueDictionary(new { locale = "en-US", year = DateTime.Now.Year.ToString() }))
+    @*this was added to create a new RouteValue dictionary. Instead of creating an anonymous object. It creates a new instance of
+        the  RouteValue dictionary, which inside of that its still creating new anonymous objects to indicate local and year
+        (which is essentially what the line above is doing, but was doing behind the scenes. So it adds a query string, with 
+        the two key value pairs concatenated together with &  *@
+<br/>
+@*@{ 
+    belongs to Version 4
+var myDictionary = new Dictionary<string, object>();
+    myDictionary.Add("First", "A");
+    myDictionary.Add("Second", "B");
+    myDictionary.Add("Third", "C");
+}
+   
+    @Html.ActionLink("Create V4", "Create", new RouteValueDictionary(myDictionary))*@
+
+
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @*by adding the additional value that doesn't route,(somesuch =456) it converts to a query string. Its not represented anywhere else. So what does the routing system do?:
+        It adds it to the url ?somesuch=456. The ? indicates that we are working with a query string, which is an extra value appended onto the URL that
+        can be plucked off on the request side.*@
+
+            @Html.ActionLink("Edit", "Edit", new { id = item.ProductId, somesuch = 456 }) |
+            @Html.ActionLink("Details", "Details", new { id = item.ProductId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })
+        </td>
+    </tr>
+}
+
+</table>
